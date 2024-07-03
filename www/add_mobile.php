@@ -1,8 +1,8 @@
 <?php
   include("user_authentication.php");
-
+  // connection to database
+  include("dbConn.php");
   if(isset($_POST['save'])){
-
     $bname = $_POST['bname'];
     $blang = $_POST['blang'];
     $NOpage = $_POST['NOpage'];
@@ -11,13 +11,12 @@
     $bdesc = $_POST['bdesc'];    
     $bcategory = $_POST['cname'];    
     //1 connect to server
-    $seConnect = mysqli_connect("localhost","root","","library");
     //2 write query (insert query)
     $query = "INSERT INTO `book`( `name`, `number_of_pages`, `first_author`, `second_author`, `language`, `description`, `book_category_id`) VALUES ('$bname','$NOpage','$fAuthor','$sAuthor','$blang','$bdesc','$bcategory')";
-    $result = mysqli_query($seConnect, $query);
+    $result = mysqli_query($Conn, $query);
     // action 
     if($result){
-      header("location:add_book.php?save=1");
+      header("location:add_mobile.php?add=1");
     die;
     }
   }
