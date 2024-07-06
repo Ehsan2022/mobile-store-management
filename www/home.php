@@ -143,7 +143,7 @@
                     <div class="col-xxl-3 col-md-4 col-6">
                       <div class="card info-card">
                         <div class="card-body">
-                          <h5 class="card-title">Views <span>| All Pages </span></h5>
+                          <h5 class="card-title">Views <span>| All  </span></h5>
 
                           <div class="d-flex align-items-center">
                             <div style='background-color:#69e2ed55;' class="card-icon rounded-circle d-flex align-items-center justify-content-center">
