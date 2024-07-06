@@ -2,17 +2,18 @@
   include("user_authentication.php");
   // connection to database
   include("dbConn.php");
+  // insert mobile
   if(isset($_POST['save'])){
-    $bname = $_POST['bname'];
-    $blang = $_POST['blang'];
-    $NOpage = $_POST['NOpage'];
-    $fAuthor = $_POST['fAuthor'];    
-    $sAuthor = $_POST['sAuthor'];    
-    $bdesc = $_POST['bdesc'];    
-    $bcategory = $_POST['cname'];    
+     $brand = $_POST['brand'];
+     $model = $_POST['model'];
+     $color = $_POST['color'];
+     $ram = $_POST['ram'];    
+     $rom = $_POST['rom'];    
+     $fcam = $_POST['fcam'];    
+     $rcam = $_POST['rcam'];    
     //1 connect to server
     //2 write query (insert query)
-    $query = "INSERT INTO `book`( `name`, `number_of_pages`, `first_author`, `second_author`, `language`, `description`, `book_category_id`) VALUES ('$bname','$NOpage','$fAuthor','$sAuthor','$blang','$bdesc','$bcategory')";
+    $query = "INSERT INTO `mobile`( `mobile_model`, `mobile_color`, `mobile_ram`, `mobile_rom`, `mobile_front_cam`, `mobile_back_cam`, `mobile_brand_mb_id`) VALUES ('$model','$color','$ram','$rom','$fcam','$rcam','$brand')";
     $result = mysqli_query($Conn, $query);
     // action 
     if($result){
@@ -20,6 +21,19 @@
     die;
     }
   }
+
+  // Delete user
+  if(isset($_GET['mobile_id'])){
+    $mobileID = $_GET['mobile_id'];
+
+    $delete = "DELETE FROM `mobile` WHERE mobile_id= '$mobileID'";
+    $deleteQuery = mysqli_query($Conn, $delete);
+
+    if($deleteQuery){
+        header("location:add_mobile.php?Deleted=1");
+        die;
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -102,22 +116,18 @@
                         <div class="row mb-3">
                           <label for="brand" class="col-sm-5 col-form-label text-lg-end text-md-end">Brand</label>
                           <div class="col-sm-7">
-                            <select type="text" class="form-control" name="brand" id="brand" value="category">
+                            <select type="text" class="form-control" name="brand" id="brand" value="brand">
 
                                 <?php
-                                    $seConnect = mysqli_connect("localhost","root","","library");
-
-                                    $sql = "SELECT * FROM `book_category`";
-                                
-                                    $query = mysqli_query($seConnect, $sql);
-                
+                                    $sql = "SELECT * FROM `mobile_brand`";
+                                    $query = mysqli_query($Conn, $sql);               
                                     while($row = mysqli_fetch_assoc($query)){
             
-                                    $category_book_name = $row['name'];
-                                    $category_book_id = $row['id'];
+                                    $brand_id = $row['mb_id'];
+                                    $brand_name = $row['mb_name'];
 
                                     echo "
-                                    <option value='$category_book_id'>$category_book_name</option>
+                                    <option value='$brand_id'>$brand_name</option>
                                         ";
                                     }
                                 ?>
@@ -178,6 +188,76 @@
                 
               </form><!-- End Horizontal Form -->
 
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="card-body table-responsive">
+              <h5 class="card-title">List Of Mobiles</h5>
+              <!-- Table with stripped rows -->
+              <table class="table datatable table-hover ">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Model</th>
+                    <th scope="col">Color</th>
+                    <th scope="col">Ram</th>
+                    <th scope="col">Rom </th>
+                    <th scope="col">Front Camera</th>
+                    <th scope="col">Rear Camera</th>
+                    <th scope="col">Brand</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                <?php 
+                    // Read from DB and displaying users
+                    $select = "SELECT * FROM `mobile` INNER JOIN `mobile_brand` ON  mobile_brand_mb_id = mb_id";
+                    $selectQuery = mysqli_query($Conn, $select);
+
+                    $num = 1;
+                    while($row = mysqli_fetch_assoc($selectQuery)){
+                        $mobile_id = $row['mobile_id'];
+                        echo $model = $row['mobile_model'];
+                        $color = $row['mobile_color'];
+                        $ram = $row['mobile_ram'];
+                        $rom = $row['mobile_rom'];    
+                        $fcam = $row['mobile_front_cam'];    
+                        $rcam = $row['mobile_back_cam'];    
+                        $brand = $row['mb_name'];    
+
+                        echo "
+                        <tr>
+                            <th scope='row'>$num</th>
+                            <th >$model</th>
+                            <td>$color</td>
+                            <td>$ram</td>
+                            <td>$rom</td>
+                            <td>$fcam</td>
+                            <td>$rcam</td>
+                            <td>$brand</td>
+                            <td>
+                            <a href='edit_mobile.php?mobile_id=$mobile_id' title='Edit Mobile '>  <i class='bi bi-pencil-square' style='font-size:20px; color:green'></i> </a> 
+                            <a style='color:transparent;'>----</a>
+                            <a href='add_mobile.php?mobile_id=$mobile_id' title='Delete Mobile'>  <i class='bx bxs-trash' style='font-size:20px; color:red'></i> </a> 
+                            </td>
+                        </tr>
+                        ";
+                        $num++;
+                    }
+                ?> 
+                </tbody>
+              </table>
+              <!-- End Table with stripped rows -->
+
+              
             </div>
           </div>
 
