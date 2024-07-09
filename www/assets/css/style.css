@@ -369,8 +369,8 @@ h6 {
   transition: all 0.5s;
   z-index: 997;
   height: 60px;
-  box-shadow: 0px 1px 15px rgba(1, 41, 112, 0.5);
   background-color: #00283f;
+  border-bottom: 1px solid grey;
   padding-left: 20px;
   /* Toggle Sidebar Button */
   /* Search Bar */
@@ -443,7 +443,6 @@ h6 {
 .header-nav > ul {
   margin: 0;
   padding: 0;
-  
 }
 .header-nav .nav-icon {
   font-size: 20px;
@@ -480,7 +479,7 @@ h6 {
   scrollbar-width: thin;
   scrollbar-color: #aab7cf transparent;
   box-shadow: 0px 0px 20px rgba(1, 41, 112, 0.1);
-  background-color: #fff;
+  background-color: #00283f;
 }
 @media (max-width: 1199px) {
   .sidebar {
@@ -543,7 +542,7 @@ h6 {
   font-weight: 900;
   color: #00283f;
   transition: 0.3;
-  background: #F1F4FC;
+  background: #f1f4fc;
   padding: 10px 15px;
   border-radius: 4px;
 }
@@ -563,7 +562,7 @@ h6 {
 
 .sidebar-nav .nav-link:hover {
   color: white;
-  background: #00283f;
+  background: #3a5464;
   transform: translateX(10px);
   transition: all 0.2s;
   -webkit-transform: translateX(10px);
@@ -630,7 +629,6 @@ h6 {
   color: #4154f1;
   background: #f6f6fe;
 } */
-
 
 /* Activity */
 .dashboard .activity {
@@ -973,8 +971,8 @@ h6 {
 # Footer
 --------------------------------------------------------------*/
 .footer {
-  box-shadow: 0px 1px 20px rgba(1, 41, 112, 0.5);
   background-color: #00283f;
+  border-top: 1px solid grey;
   padding: 12px 0;
   font-size: 14px;
   transition: all 0.3s;
@@ -997,8 +995,8 @@ h6 {
   position: absolute;
   width: 86%;
   bottom: 90px;
-  color: rgb(175, 20, 20);
-  background-color: rgba(255, 0, 0, 0.2);
+  color: red;
+  background: #f1f4fc;
 }
 #logoutIcon {
   color: rgb(175, 20, 20);
