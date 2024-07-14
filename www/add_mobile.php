@@ -19,21 +19,25 @@
      $allowed = array('image/jpeg', 'image/jpg','image/png');
      $extFimg = substr($fImg, strrpos($fImg, '.') + 1);
      $time = time();
-     $fImg = $model."_".$time.".".$extFimg;
+      $fImg = $model."_".$time.".".$extFimg;
 
      $bImg= $_FILES['bimg']['name'];
      $source = $_FILES['bimg']['tmp_name'];
      $_FILES['bimg']['type'];
      $allowed = array('image/jpeg', 'image/jpg','image/png');
      $extBimg = substr($bImg, strrpos($bImg, '.') + 1);
-     $time = time();
-     $bImg = $model."_".$time.".".$extBimg;
+     $time2 = time()+10;
+      $bImg = $model."_".$time2.".".$extBimg;
 
-    if(in_array($_FILES['fimg']['type'], $allowed) && in_array($_FILES['bimg']['type'], $allowed)){
+    if(in_array($_FILES['fimg']['type'], $allowed) ){
         $destination = "assets/img/";
         move_uploaded_file($source, $destination.$fImg);
-        move_uploaded_file($source, $destination.$bImg);
-    }else{
+    }
+    if (  in_array($_FILES['bimg']['type'], $allowed)) {
+      $destination = "assets/img/";
+      move_uploaded_file($source, $destination.$bImg);
+  }
+    else{
 
       echo   $msgErr = "this type of file is not allowed!";
     }
@@ -164,12 +168,12 @@
                         <div class="row justify-content-end mb-3">
                           <div class="col-lg-5 ">
                           <label for="fimg" class=" col-form-label text-lg-end offset-4">Front Image</label>
-                          <input style="width:100px;" type="file" class="form-control offset-4" name="fimg" id="fimg" value="" required>
+                          <input style="width:100px;" type="file" class="form-control offset-4" name="fimg" id="fimg" required>
 
                           </div>
                           <div class="col-lg-5 ">
-                          <label for="fimg" class=" col-form-label text-lg-end text-md-end offset-5">Back Image</label>
-                          <input style="width:100px;" type="file" class="form-control offset-5" name="fimg" id="fimg" value="" required>
+                          <label for="bimg" class=" col-form-label text-lg-end text-md-end offset-5">Back Image</label>
+                          <input style="width:100px;" type="file" class="form-control offset-5" name="bimg" id="bimg"  required>
 
                           </div>
                         </div>

@@ -44,19 +44,23 @@ if(isset($_POST['update'])){
     $_FILES['bimg']['type'];
     $allowed = array('image/jpeg', 'image/jpg','image/png');
     $extBimg = substr($bImg_new, strrpos($bImg_new, '.') + 1);
-    $time = time();
+    $time = time()+10;
     $bImg_new = $model."_".$time.".".$extBimg;
 
-   if(in_array($_FILES['fimg']['type'], $allowed) && in_array($_FILES['bimg']['type'], $allowed)){
+   if(in_array($_FILES['fimg']['type'], $allowed)){
        $destination = "assets/img/";
        move_uploaded_file($source, $destination.$fImg_new);
+   }
+   if (  in_array($_FILES['bimg']['type'], $allowed)) {
+       $destination = "assets/img/";
        move_uploaded_file($source, $destination.$bImg_new);
-   }else{
+   }
+   else {
 
      echo   $msgErr = "this type of file is not allowed!";
    }
        
-    $update_sql = "update `mobile` set `mobile_model`='$model_new', `mobile_color`='$color_new', `mobile_ram`='$ram_new', `mobile_rom`='$rom_new', `mobile_front_cam`='$fcam_new', `mobile_back_cam`='$rcam_new', `mobile_brand_mb_id`='$brand_new', `fimg`='$fImg_new', `bimg`='$bImg_new' where mobile_id='$mobileID'";
+    $update_sql = "update `mobile` set `mobile_model`='$model_new', `mobile_color`='$color_new', `mobile_ram`='$ram_new', `mobile_rom`='$rom_new', `mobile_front_cam`='$fcam_new', `mobile_back_cam`='$rcam_new', `mobile_brand_mb_id`='$brand_new', `fimg`='$fImg_new', `bimg`='$bImg_new', `price`='$price_new' where mobile_id='$mobileID'";
     $updateResult = mysqli_query($Conn, $update_sql);
     if($updateResult){
         header("location:add_mobile.php?Updated=1");
@@ -179,8 +183,8 @@ if(isset($_POST['update'])){
 
                           </div>
                           <div class="col-lg-5 ">
-                          <label for="fimg" class=" col-form-label text-lg-end text-md-end offset-5">Back Image</label>
-                          <input style="width:100px;" type="file" class="form-control offset-5" name="fimg" id="fimg" value="<?php echo $bimg_old ?>" required>
+                          <label for="bimg" class=" col-form-label text-lg-end text-md-end offset-5">Back Image</label>
+                          <input style="width:100px;" type="file" class="form-control offset-5" name="bimg" id="bimg" value="<?php echo $bimg_old ?>" required>
 
                           </div>
                         </div>
