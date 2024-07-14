@@ -14,6 +14,9 @@
     $rom_old = $row['mobile_rom'];    
     $fcam_old = $row['mobile_front_cam'];    
     $rcam_old = $row['mobile_back_cam'];    
+    $fimg_old = $row['fimg'];    
+    $bimg_old = $row['bimg'];    
+    $price_old = $row['price'];    
     $brand_id_old = $row['mb_id'];    
 }
 
@@ -25,9 +28,35 @@ if(isset($_POST['update'])){
     $rom_new = $_POST['rom'];
     $fcam_new = $_POST['fcam'];
     $rcam_new = $_POST['rcam'];
+    $price_new = $_POST['price'];
     $brand_new = $_POST['brand'];
+
+    $fImg_new= $_FILES['fimg']['name'];
+    $source = $_FILES['fimg']['tmp_name'];
+    $_FILES['fimg']['type'];
+    $allowed = array('image/jpeg', 'image/jpg','image/png');
+    $extFimg = substr($fImg_new, strrpos($fImg_new, '.') + 1);
+    $time = time();
+    $fImg_new = $model."_".$time.".".$extFimg;
+
+    $bImg_new= $_FILES['bimg']['name'];
+    $source = $_FILES['bimg']['tmp_name'];
+    $_FILES['bimg']['type'];
+    $allowed = array('image/jpeg', 'image/jpg','image/png');
+    $extBimg = substr($bImg_new, strrpos($bImg_new, '.') + 1);
+    $time = time();
+    $bImg_new = $model."_".$time.".".$extBimg;
+
+   if(in_array($_FILES['fimg']['type'], $allowed) && in_array($_FILES['bimg']['type'], $allowed)){
+       $destination = "assets/img/";
+       move_uploaded_file($source, $destination.$fImg_new);
+       move_uploaded_file($source, $destination.$bImg_new);
+   }else{
+
+     echo   $msgErr = "this type of file is not allowed!";
+   }
        
-    $update_sql = "update `mobile` set `mobile_model`='$model_new', `mobile_color`='$color_new', `mobile_ram`='$ram_new', `mobile_rom`='$rom_new', `mobile_front_cam`='$fcam_new', `mobile_back_cam`='$rcam_new', `mobile_brand_mb_id`='$brand_new' where mobile_id='$mobileID'";
+    $update_sql = "update `mobile` set `mobile_model`='$model_new', `mobile_color`='$color_new', `mobile_ram`='$ram_new', `mobile_rom`='$rom_new', `mobile_front_cam`='$fcam_new', `mobile_back_cam`='$rcam_new', `mobile_brand_mb_id`='$brand_new', `fimg`='$fImg_new', `bimg`='$bImg_new' where mobile_id='$mobileID'";
     $updateResult = mysqli_query($Conn, $update_sql);
     if($updateResult){
         header("location:add_mobile.php?Updated=1");
@@ -106,7 +135,7 @@ if(isset($_POST['update'])){
             <div class="card-body">
               <hr>
               <!-- Horizontal Form -->
-              <form method="post" action="">
+              <form method="post" enctype="multipart/form-data">
                 <?php
                 if(isset($_GET['save'])){
                  echo "<h2 class='text-success'>Successfully Inserted!</h2>";
@@ -140,6 +169,19 @@ if(isset($_POST['update'])){
                                     }
                                 ?>
                             </select>
+                          </div>
+                        </div>
+
+                        <div class="row justify-content-end mb-3">
+                          <div class="col-lg-5 ">
+                          <label for="fimg" class=" col-form-label text-lg-end offset-4">Front Image</label>
+                          <input style="width:100px;" type="file" class="form-control offset-4" name="fimg" id="fimg" value="<?php echo $fimg_old ?>" required>
+
+                          </div>
+                          <div class="col-lg-5 ">
+                          <label for="fimg" class=" col-form-label text-lg-end text-md-end offset-5">Back Image</label>
+                          <input style="width:100px;" type="file" class="form-control offset-5" name="fimg" id="fimg" value="<?php echo $bimg_old ?>" required>
+
                           </div>
                         </div>
                         
@@ -184,6 +226,12 @@ if(isset($_POST['update'])){
                             <label for="rcam" class="col-sm-5 col-form-label text-lg-end text-md-end">Rear Cam</label>
                             <div class="col-sm-7">
                               <input type="text" class="form-control" name="rcam" id="rcam" value="<?php echo $rcam_old ?>" required>
+                            </div>
+                          </div>
+                          <div class="row mb-3">
+                            <label for="price" class="col-sm-5 col-form-label text-lg-end text-md-end">Price/$</label>
+                            <div class="col-sm-7">
+                              <input type="text" class="form-control" name="price" id="price" value="<?php echo $price_old ?>" required>
                             </div>
                           </div>
 

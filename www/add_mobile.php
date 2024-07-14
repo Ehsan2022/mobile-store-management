@@ -10,10 +10,36 @@
      $ram = $_POST['ram'];    
      $rom = $_POST['rom'];    
      $fcam = $_POST['fcam'];    
-     $rcam = $_POST['rcam'];    
+     $rcam = $_POST['rcam']; 
+     $price = $_POST['price'];    
+
+     $fImg= $_FILES['fimg']['name'];
+     $source = $_FILES['fimg']['tmp_name'];
+     $_FILES['fimg']['type'];
+     $allowed = array('image/jpeg', 'image/jpg','image/png');
+     $extFimg = substr($fImg, strrpos($fImg, '.') + 1);
+     $time = time();
+     $fImg = $model."_".$time.".".$extFimg;
+
+     $bImg= $_FILES['bimg']['name'];
+     $source = $_FILES['bimg']['tmp_name'];
+     $_FILES['bimg']['type'];
+     $allowed = array('image/jpeg', 'image/jpg','image/png');
+     $extBimg = substr($bImg, strrpos($bImg, '.') + 1);
+     $time = time();
+     $bImg = $model."_".$time.".".$extBimg;
+
+    if(in_array($_FILES['fimg']['type'], $allowed) && in_array($_FILES['bimg']['type'], $allowed)){
+        $destination = "assets/img/";
+        move_uploaded_file($source, $destination.$fImg);
+        move_uploaded_file($source, $destination.$bImg);
+    }else{
+
+      echo   $msgErr = "this type of file is not allowed!";
+    }
     //1 connect to server
     //2 write query (insert query)
-    $query = "INSERT INTO `mobile`( `mobile_model`, `mobile_color`, `mobile_ram`, `mobile_rom`, `mobile_front_cam`, `mobile_back_cam`, `mobile_brand_mb_id`) VALUES ('$model','$color','$ram','$rom','$fcam','$rcam','$brand')";
+    $query = "INSERT INTO `mobile`( `mobile_model`, `mobile_color`, `mobile_ram`, `mobile_rom`, `mobile_front_cam`, `mobile_back_cam`, `mobile_brand_mb_id`, `fimg`, `bimg`, `price`) VALUES ('$model','$color','$ram','$rom','$fcam','$rcam','$brand','$fImg','$bImg','$price')";
     $result = mysqli_query($Conn, $query);
     // action 
     if($result){
@@ -105,7 +131,7 @@
             <div class="card-body">
               <hr>
               <!-- Horizontal Form -->
-              <form method="post" action="">
+              <form method="post" enctype="multipart/form-data">
                 <?php
                 if(isset($_GET['save'])){
                  echo "<h2 class='text-success'>Successfully Inserted!</h2>";
@@ -134,11 +160,24 @@
                             </select>
                           </div>
                         </div>
-                        
+
+                        <div class="row justify-content-end mb-3">
+                          <div class="col-lg-5 ">
+                          <label for="fimg" class=" col-form-label text-lg-end offset-4">Front Image</label>
+                          <input style="width:100px;" type="file" class="form-control offset-4" name="fimg" id="fimg" value="" required>
+
+                          </div>
+                          <div class="col-lg-5 ">
+                          <label for="fimg" class=" col-form-label text-lg-end text-md-end offset-5">Back Image</label>
+                          <input style="width:100px;" type="file" class="form-control offset-5" name="fimg" id="fimg" value="" required>
+
+                          </div>
+                        </div>
+
                         <div class="row mb-3">
                           <label for="model" class="col-sm-5 col-form-label text-lg-end text-md-end">Model</label>
                           <div class="col-sm-7">
-                            <input type="text" class="form-control" name="model" id="model" value="" required>
+                            <input type="text" class="form-control " name="model" id="model" value="" required>
                           </div>
                         </div>
 
@@ -178,6 +217,12 @@
                               <input type="text" class="form-control" name="rcam" id="rcam" value="" required>
                             </div>
                           </div>
+                          <div class="row mb-3">
+                            <label for="price" class="col-sm-5 col-form-label text-lg-end text-md-end">Price/$</label>
+                            <div class="col-sm-7">
+                              <input type="text" class="form-control" name="price" id="price" value="" required>
+                            </div>
+                          </div>
 
                           <div class="row d-flex justify-content-center  mb-3">
                             <button type="submit" name="save" class="col-lg-3 col-md-3 col-3 btn btn-primary ">Save</button>
@@ -206,6 +251,7 @@
                 <thead>
                   <tr>
                     <th scope="col">#</th>
+                    <th scope="col">Image</th>
                     <th scope="col">Model</th>
                     <th scope="col">Color</th>
                     <th scope="col">Ram</th>
@@ -213,6 +259,7 @@
                     <th scope="col">Front Camera</th>
                     <th scope="col">Rear Camera</th>
                     <th scope="col">Brand</th>
+                    <th scope="col">Price/$</th>
                     <th scope="col">Action</th>
                   </tr>
                 </thead>
@@ -225,23 +272,31 @@
                     $num = 1;
                     while($row = mysqli_fetch_assoc($selectQuery)){
                         $mobile_id = $row['mobile_id'];
-                        echo $model = $row['mobile_model'];
+                        $model = $row['mobile_model'];
                         $color = $row['mobile_color'];
                         $ram = $row['mobile_ram'];
                         $rom = $row['mobile_rom'];    
                         $fcam = $row['mobile_front_cam'];    
-                        $rcam = $row['mobile_back_cam'];    
+                        $rcam = $row['mobile_back_cam'];     
+                        $fimg = $row['fimg'];     
+                        $bimg = $row['bimg'];     
+                        $price = $row['price'];     
                         $brand = $row['mb_name'];    
 
                         echo "
                         <tr>
                             <th scope='row'>$num</th>
+                            <th >
+                              <img style='max-height:40px;border:none;' class='img' src='assets/img/$fimg'>
+                              <img style='max-height:40px;border:none;' class='img' src='assets/img/$bimg'>
+                            </th>
                             <th >$model</th>
                             <td>$color</td>
                             <td>$ram</td>
                             <td>$rom</td>
                             <td>$fcam</td>
                             <td>$rcam</td>
+                            <td>$price</td>
                             <td>$brand</td>
                             <td>
                             <a href='edit_mobile.php?mobile_id=$mobile_id' title='Edit Mobile '>  <i class='bi bi-pencil-square' style='font-size:20px; color:green'></i> </a> 

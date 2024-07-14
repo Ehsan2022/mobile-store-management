@@ -2,9 +2,9 @@
   include("user_authentication.php");
   //connect to DB
   include("dbConn.php");
-    echo $uID = $_GET['uID'];
+    $uID = $_GET['uID'];
     // Read old data from DB and displaying users
-    $select = "SELECT * FROM `user` order by id desc";
+    $select = "SELECT * FROM `user` where id='$uID'";
     $selectQuery = mysqli_query($Conn, $select);
     $row = mysqli_fetch_assoc($selectQuery);
 
@@ -13,7 +13,7 @@
     $uName_old = $row['user_name'];
     $password_old = $row['password'];
     $status_old = $row['status'];
-$img_old = $row['profile_image_url'];
+    $img_old = $row['profile_image_url'];
 
   if(isset($_POST['update'])){
     $fName_new = $_POST['fname'];
@@ -21,9 +21,27 @@ $img_old = $row['profile_image_url'];
     $uName_new = $_POST['uname'];
     $password_new = $_POST['pass'];
     $status_new = $_POST['stat'];
-    $img_new = $_POST['img'];
+    
+    $file_name_new = $_FILES['img']['name'];
+     $source = $_FILES['img']['tmp_name'];
+     $_FILES['img']['type'];
+
+     $allowed = array('image/jpeg', 'image/jpg','image/png');
+     
+     $ext = substr($file_name_new, strrpos($file_name_new, '.') + 1);
+    $time = time();
+     $file_name_new = $fName."_".$time.".".$ext;
+
+    if(in_array($_FILES['img']['type'], $allowed)){
+        $destination = "assets/img/";
+        move_uploaded_file($source, $destination.$file_name_new);
+    }else{
+
+      echo   $msgErr = "this type of file is not allowed!";
+    }
+
     //update user
-    $update = " UPDATE `user` SET `first_name`='$fName_new',`last_name`='$lName_new',`user_name`='$uName_new',`password`='$password_new',`status`='$status_new', `profile_image_url`='$img_new' where `id`='$uID' ";
+    $update = " UPDATE `user` SET `first_name`='$fName_new',`last_name`='$lName_new',`user_name`='$uName_new',`password`='$password_new',`status`='$status_new', `profile_image_url`='$file_name_new' where `id`='$uID' ";
     $updateResult = mysqli_query($Conn, $update);
     // action 
     if($updateResult){
@@ -82,7 +100,7 @@ $img_old = $row['profile_image_url'];
                         <div class="card-body">
                         <hr>
                         <!-- Horizontal Form -->
-                        <form method="post" action="">
+                        <form method="post" enctype="multipart/form-data">
                             <?php
                                 if(isset($_GET['save'])){
                                     echo "<h2 class='text-success'>Successfully Inserted!</h2>";
@@ -91,7 +109,7 @@ $img_old = $row['profile_image_url'];
                         <div class="row mb-3">
                             <label for="img" class="col-sm-2 col-form-label">Profile Image</label>
                             <div class="col-sm-10">
-                                <input type="file" class="form-control" name="img" id="inputText"  value="<?php echo $img_old ?>">
+                                <input style="width:100px;" type="file" class="form-control" name="img" id="inputText"  value="<?php echo $img_old ?>">
                             </div>
                             </div>
                             <div class="row mb-3">

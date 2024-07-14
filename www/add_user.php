@@ -10,10 +10,28 @@
     $uName = $_POST['uname'];
     $password = $_POST['pass'];    
     $stat = $_POST['stat'];    
-    $img = $_POST['img'];    
+    
+    $file_name = $_FILES['img']['name'];
+     $source = $_FILES['img']['tmp_name'];
+     $_FILES['img']['type'];
+
+     $allowed = array('image/jpeg', 'image/jpg','image/png');
+     
+     $ext = substr($file_name, strrpos($file_name, '.') + 1);
+    $time = time();
+     $file_name = $fName."_".$time.".".$ext;
+
+    if(in_array($_FILES['img']['type'], $allowed)){
+        $destination = "assets/img/";
+        move_uploaded_file($source, $destination.$file_name);
+    }else{
+
+      echo   $msgErr = "this type of file is not allowed!";
+    }
+
 
     //2 write query (insert query)
-    $insert = "INSERT INTO `user`( `first_name`, `last_name`, `user_name`, `password`, `status`, `profile_image_url` ) VALUES ('$fName','$lName','$uName','$password','$stat','$img')";
+    $insert = "INSERT INTO `user`( `first_name`, `last_name`, `user_name`, `password`, `status`, `profile_image_url` ) VALUES ('$fName','$lName','$uName','$password','$stat','$file_name')";
     $inserQuery = mysqli_query($Conn, $insert);
     // action 
     if($inserQuery){
@@ -76,7 +94,7 @@
                     <div class="card-body">
                     <hr>
                     <!-- Horizontal Form -->
-                    <form method="post" action="">
+                    <form method="post" enctype="multipart/form-data">
                         <?php
                         if(isset($_GET['save'])){
                         echo "<h2 class='text-success'>Successfully Inserted!</h2>";
@@ -86,7 +104,7 @@
                     <div class="row mb-3">
                         <label for="img" class="col-sm-2 col-form-label">Profile Image</label>
                         <div class="col-sm-10">
-                            <input type="file" class="form-control" name="img" id="inputText" value="" >
+                            <input style="width:100px;" type="file" class="form-control" name="img" id="inputText" value="" >
                         </div>
                         </div>
                         <div class="row mb-3">

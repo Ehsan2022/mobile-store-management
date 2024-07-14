@@ -108,7 +108,7 @@
                                 <div class="row mb-3">
                                     <label for="img" class="col-sm-3 col-form-label ">Profile Image</label>
                                     <div class="col-sm-9">
-                                        <input type="file" class="form-control" name="img" id="inputText" value="<?php echo $img_old ?>">
+                                        <input style="width:100px;" type="file" class="form-control" name="img" id="inputText" value="<?php echo $img_old ?>">
                                     </div>
                                 </div>
                                 <div class="row mb-3">
