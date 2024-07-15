@@ -10,8 +10,17 @@
         $first_name = $row['first_name'];
         $last_name = $row['last_name'];
         $user_name = $row['user_name'];
+        $user_status = $row['status'];
         $profile_image = $row['profile_image_url'];
       }
+    }
+
+
+    $sidebarVisible="";
+    if($user_status == "active"){
+      $sidebarVisible="";
+    }else {
+      $sidebarVisible="disabled";
     }
 ?>
 

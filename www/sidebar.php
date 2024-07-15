@@ -1,3 +1,24 @@
+<?php
+    include("dbConn.php");
+    if(!$Conn){
+      die("Connection failed: " . mysqli_connect_error());
+    }
+    $sql = "SELECT * FROM user";
+    $result = mysqli_query($Conn, $sql);
+    while ($row = mysqli_fetch_assoc($result)) {
+      if ($_SESSION["userID"] == $row['id']) {
+        echo "<br><br><br>";
+        echo $user_status = $row['status'];
+      }
+    }
+
+    if($user_status == "active"){
+      $visible=null;
+    } 
+    else{
+      $visible="hidden";
+    }
+?>
 <aside id="sidebar" class="sidebar ">
 
     <ul class="sidebar-nav" id="sidebar-nav">
@@ -20,14 +41,14 @@
         </a>
       </li><!-- End Tables Nav -->
 
-      <li class="nav-item">
-      <a class="nav-link "  href="add_user.php">
+      <li class="nav-item" <?php echo $visible ?> >
+      <a class="nav-link "  href="add_user.php" >
       <i class="bi bi-person"></i><span>Add User</span>
         </a>
       </li><!-- End Tables Nav -->
 
       </li><!-- End Tables Nav -->
-      <li class="nav-item">
+      <li class="nav-item" <?php echo $visible ?> >
       <a class="nav-link "  href="list_of_users.php">
       <i class="bi bi-people"></i><span>List of Users</span>
         </a>
